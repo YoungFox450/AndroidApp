@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Nouvelle Palette de Couleurs Accents -->
+    <color name="primary">#ED8572</color>   <!-- Coral/Salmon -->
+    <color name="secondary">#74A8F0</color> <!-- Soft Blue -->
+    <color name="tertiary">#8BED72</color>  <!-- Light Green -->
+
+    <!-- Thème Général Gris Sombre -->
+    <color name="bg_main">#121212</color>      <!-- Fond profond -->
+    <color name="surface_dark">#1E1E1E</color>  <!-- Cartes et surfaces -->
+    <color name="surface_lighter">#2C2C2C</color> <!-- Champs de saisie et contrastes -->
+
+    <!-- Texte -->
+    <color name="text_title">#FFFFFF</color>
+    <color name="text_body">#E0E0E0</color>
+    <color name="text_hint">#9E9E9E</color>
+</resources>

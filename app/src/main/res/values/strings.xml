@@ -1,0 +1,74 @@
+<resources>
+    <string name="app_name">Nox-group</string>
+    <string name="add_person">Ajouter une personne</string>
+    <string name="hint_nom">Nom</string>
+    <string name="hint_postnom">Post-nom</string>
+    <string name="hint_prenom">Prénom</string>
+    <string name="hint_sexe">Sexe</string>
+    <string name="hint_classe">Promotion / Filière</string>
+    <string name="hint_promotion">Promotion</string>
+    <string name="hint_filiere">Filière</string>
+    <string name="hint_description">Description / Biographie</string>
+    <string name="btn_save">Enregistrer</string>
+    <string name="btn_back">Retour</string>
+    <string name="btn_delete">Supprimer</string>
+    <string name="person_details">Détails du profil</string>
+    <string name="error_fill_fields">Veuillez remplir au moins le nom et le prénom</string>
+    <string name="full_name_format">%1$s %2$s %3$s</string>
+    <string name="label_sexe">Sexe: %1$s</string>
+    <string name="label_classe">Promotion: %1$s</string>
+    <string name="label_description">Description: \n%1$s</string>
+    <string name="short_name_format">%1$s %2$s</string>
+    <string name="label_bio_header">Bio</string>
+    <string name="label_sexe_header">Genre</string>
+    <string name="content_desc_take_photo">Prendre une photo de profil</string>
+
+    <string-array name="sexe_choices">
+        <item>Masculin</item>
+        <item>Féminin</item>
+        <item>Deux foid, Deux fois</item>
+    </string-array>
+
+    <string-array name="level_choices">
+        <item>Prepa</item>
+        <item>L1</item>
+        <item>L2</item>
+        <item>L3</item>
+    </string-array>
+
+    <string-array name="filiere_choices">
+        <item>Informatique Appliquée</item>
+        <item>Électricité</item>
+        <item>Électronique</item>
+        <item>Mécanique</item>
+        <item>Aviation</item>
+        <item>Énergie Renouvelable</item>
+    </string-array>
+
+    <string-array name="promotion_choices">
+        <item>Prepa Informatique Appliquée</item>
+        <item>L1 Informatique Appliquée</item>
+        <item>L2 Informatique Appliquée</item>
+        <item>L3 Informatique Appliquée</item>
+        <item>Prepa Électricité</item>
+        <item>L1 Électricité</item>
+        <item>L2 Électricité</item>
+        <item>L3 Électricité</item>
+        <item>Prepa Électronique</item>
+        <item>L1 Électronique</item>
+        <item>L2 Électronique</item>
+        <item>L3 Électronique</item>
+        <item>Prepa Mécanique</item>
+        <item>L1 Mécanique</item>
+        <item>L2 Mécanique</item>
+        <item>L3 Mécanique</item>
+        <item>Prepa Aviation</item>
+        <item>L1 Aviation</item>
+        <item>L2 Aviation</item>
+        <item>L3 Aviation</item>
+        <item>Prepa Énergie Renouvelable</item>
+        <item>L1 Énergie Renouvelable</item>
+        <item>L2 Énergie Renouvelable</item>
+        <item>L3 Énergie Renouvelable</item>
+    </string-array>
+</resources>

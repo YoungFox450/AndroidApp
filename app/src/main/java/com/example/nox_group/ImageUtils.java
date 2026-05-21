@@ -8,24 +8,31 @@ import android.widget.ImageView;
 
 import java.io.IOException;
 
+/**
+ * Classe utilitaire pour la manipulation d'images.
+ * Gère le chargement, le redimensionnement et la correction d'orientation des photos.
+ */
 public class ImageUtils {
 
     /**
-     * Charge une image depuis un chemin, la redimensionne pour économiser de la mémoire
-     * et la pivote correctement selon les métadonnées EXIF.
+     * Charge une image depuis un chemin local, l'optimise pour la mémoire (downsampling)
+     * et applique les rotations nécessaires basées sur les métadonnées EXIF.
+     *
+     * @param photoPath Chemin absolu du fichier image sur le disque.
+     * @param imageView L'ImageView dans laquelle afficher l'image traitée.
      */
     public static void loadResizedAndRotatedImage(String photoPath, ImageView imageView) {
         if (photoPath == null || photoPath.isEmpty()) return;
 
-        // 1. Obtenir les dimensions de l'ImageView
+        // 1. Obtenir les dimensions cibles (celles de la vue d'affichage)
         int targetW = imageView.getWidth();
         int targetH = imageView.getHeight();
 
-        // Valeurs par défaut si non mesuré (ex: au démarrage)
+        // Si la vue n'est pas encore mesurée, on utilise une taille par défaut sécurisée
         if (targetW <= 0) targetW = 1024;
         if (targetH <= 0) targetH = 1024;
 
-        // 2. Décoder juste les bornes pour obtenir les dimensions originales
+        // 2. Analyser le fichier sans charger les données de pixels en mémoire
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(photoPath, bmOptions);
@@ -33,17 +40,19 @@ public class ImageUtils {
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
 
-        // 3. Déterminer le facteur de réduction pour éviter OutOfMemory
+        // 3. Calculer le facteur de réduction (inSampleSize)
+        // Permet de ne pas charger une image de 12MP dans une vue de 500px
         int scaleFactor = Math.max(1, Math.min(photoW / targetW, photoH / targetH));
 
-        // 4. Décoder l'image avec le facteur de réduction
+        // 4. Charger l'image réelle avec le facteur de réduction
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaleFactor;
 
         Bitmap bitmap = BitmapFactory.decodeFile(photoPath, bmOptions);
         if (bitmap == null) return;
 
-        // 5. Gérer la rotation et les effets de miroir via EXIF
+        // 5. Gérer la rotation et les effets de miroir via les tags EXIF
+        // Indispensable car beaucoup d'appareils enregistrent les photos "physiquement" de travers
         try {
             ExifInterface ei = new ExifInterface(photoPath);
             int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
@@ -78,7 +87,7 @@ public class ImageUtils {
 
             imageView.setImageBitmap(rotatedBitmap);
             
-            // Recycler le bitmap original s'il a été transformé
+            // Libérer la mémoire du bitmap original s'il a été transformé (copié)
             if (rotatedBitmap != bitmap) {
                 bitmap.recycle();
             }
@@ -89,6 +98,9 @@ public class ImageUtils {
         }
     }
 
+    /**
+     * Effectue une rotation de l'image.
+     */
     private static Bitmap rotateImage(Bitmap source, float angle) {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
@@ -96,6 +108,9 @@ public class ImageUtils {
                 matrix, true);
     }
 
+    /**
+     * Effectue un effet miroir (horizontal ou vertical).
+     */
     private static Bitmap flipImage(Bitmap source, boolean horizontal, boolean vertical) {
         Matrix matrix = new Matrix();
         matrix.preScale(horizontal ? -1 : 1, vertical ? -1 : 1);

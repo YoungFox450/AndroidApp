@@ -81,7 +81,7 @@ public class PersonDetailsActivity extends AppCompatActivity {
                     }
 
                     runOnUiThread(() -> {
-                        Toast.makeText(PersonDetailsActivity.this, "Le profil a été supprimé", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PersonDetailsActivity.this, "Un batard a été supprimé", Toast.LENGTH_SHORT).show();
                         finish();
                     });
                 }).start();

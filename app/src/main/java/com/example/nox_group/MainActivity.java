@@ -18,6 +18,10 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 
 import java.util.ArrayList;
 
+/**
+ * Activité principale de l'application.
+ * Affiche la liste des membres du groupe et permet d'accéder à l'ajout de nouveaux profils.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
@@ -25,24 +29,29 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Forcer le mode Edge-to-Edge avec la couleur bg_main et icônes claires
+        // Activation du mode Edge-to-Edge pour une immersion totale sous les barres système.
+        // On définit la couleur de fond et le style (icônes blanches sur fond sombre).
         int bgColor = ContextCompat.getColor(this, R.color.bg_main);
         EdgeToEdge.enable(this, 
-            SystemBarStyle.dark(bgColor), // Status bar
-            SystemBarStyle.dark(bgColor)  // Navigation bar
+            SystemBarStyle.dark(bgColor), 
+            SystemBarStyle.dark(bgColor)
         );
         
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Bouton flottant pour ajouter une nouvelle personne
         ExtendedFloatingActionButton fabAdd = findViewById(R.id.fabAdd);
 
-        // Ajuster les marges pour ne pas être caché par la barre de navigation
+        // Gestion dynamique des marges (Insets) pour éviter que le contenu ne soit caché par
+        // la barre de navigation système ou les coins arrondis.
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, windowInsets) -> {
             Insets systemBars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, 0, systemBars.right, 0); // Padding latéral pour le contenu
             
-            // Ajuster spécifiquement le FAB
+            // On applique un padding latéral et supérieur (pour la barre de statut)
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0);
+            
+            // On ajuste spécifiquement la marge basse du bouton flottant pour qu'il reste au-dessus de la barre de navigation
             ViewGroup.MarginLayoutParams fabParams = (ViewGroup.MarginLayoutParams) fabAdd.getLayoutParams();
             fabParams.bottomMargin = systemBars.bottom + (int) (24 * getResources().getDisplayMetrics().density);
             fabAdd.setLayoutParams(fabParams);
@@ -50,34 +59,40 @@ public class MainActivity extends AppCompatActivity {
             return windowInsets;
         });
 
+        // Navigation vers l'écran d'ajout
         fabAdd.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, AddPersonActivity.class);
             startActivity(intent);
         });
 
+        // Configuration de la liste (RecyclerView)
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        // Initialisation de l'adaptateur avec un écouteur de clic pour voir les détails d'un profil
         adapter = new PersonAdapter(new ArrayList<>(), person -> {
             Intent intent = new Intent(MainActivity.this, PersonDetailsActivity.class);
-            intent.putExtra("person", person);
+            intent.putExtra("person", person); // Passage de l'objet Person via Serializable
             startActivity(intent);
         });
         recyclerView.setAdapter(adapter);
 
+        // Observation des données de la base de données Room via LiveData.
+        // Dès qu'une personne est ajoutée ou supprimée, la liste se met à jour automatiquement.
         AppDatabase.getDatabase(this).personDao().getAll().observe(this, persons -> {
             if (persons != null) {
                 adapter.updateData(persons);
             }
         });
 
+        // Animation du bouton flottant (réduction/extension) lors du défilement de la liste
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (dy > 0 && fabAdd.isExtended()) {
-                    fabAdd.shrink();
+                    fabAdd.shrink(); // Réduit au scroll vers le bas
                 } else if (dy < 0 && !fabAdd.isExtended()) {
-                    fabAdd.extend();
+                    fabAdd.extend(); // S'étend au scroll vers le haut
                 }
             }
         });

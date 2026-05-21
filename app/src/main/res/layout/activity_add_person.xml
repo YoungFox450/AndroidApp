@@ -2,11 +2,13 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_main">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/bg_main"
@@ -18,17 +20,23 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="@string/add_person"
-            android:layout_marginTop="72dp"
             app:titleTextColor="@color/text_title"
             app:navigationIcon="@android:drawable/ic_menu_revert"
             app:navigationIconTint="@color/secondary" />
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!--
+        clipToPadding="true" : Le contenu est coupé au niveau du padding.
+        Couplé au padding dynamique en Java, cela rend la barre de navigation opaque.
+    -->
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
         android:overScrollMode="never"
+        android:clipToPadding="true"
+        android:background="@color/bg_main"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -248,6 +256,11 @@
                 app:backgroundTint="@color/tertiary"
                 app:cornerRadius="16dp"
                 app:elevation="4dp" />
+
+            <!-- Espace de respiration standard (64dp) pour une fin de liste naturelle -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="64dp" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -29,6 +29,7 @@
         <item>Masculin</item>
         <item>Féminin</item>
         <item>Deux fois, Deux fois</item>
+        <item>PD</item>>
     </string-array>
 
     <string-array name="level_choices">

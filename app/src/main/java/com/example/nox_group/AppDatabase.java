@@ -44,7 +44,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     
                     dao.insert(new Person("Milolo", "Bula", "Jael", "Féminin",
                         "L2 Informatique Appliquer",
-                        "Étudiante brillante se spécialisant dans les réseaux.", null));
+                        "Étudiante brillante se spécialisant dans les réseaux.", "jael"));
                     
                     dao.insert(new Person("Ngoy", "Tshilumba", "Patrick", "Masculin", 
                         "L3 Électronique", 

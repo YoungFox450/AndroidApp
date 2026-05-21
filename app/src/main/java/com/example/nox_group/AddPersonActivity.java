@@ -3,12 +3,12 @@ package com.example.nox_group;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -20,6 +20,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
@@ -58,9 +60,19 @@ public class AddPersonActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Forcer la couleur des barres système et les icônes blanches
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.bg_main));
+        window.setNavigationBarColor(ContextCompat.getColor(this, R.color.bg_main));
+
+        WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(window, window.getDecorView());
+        controller.setAppearanceLightStatusBars(false); // Icônes claires
+        controller.setAppearanceLightNavigationBars(false); // Icônes claires
+
         setContentView(R.layout.activity_add_person);
 
-        // Restaurer le chemin de la photo en cas de recréation de l'activité
         if (savedInstanceState != null) {
             currentPhotoPath = savedInstanceState.getString("currentPhotoPath");
         }
@@ -81,9 +93,8 @@ public class AddPersonActivity extends AppCompatActivity {
         FloatingActionButton fabTakePhoto = findViewById(R.id.fabTakePhoto);
         MaterialButton btnSave = findViewById(R.id.btnSave);
 
-        // Si l'activité a été recréée et qu'on avait déjà une photo, on l'affiche
         if (currentPhotoPath != null) {
-            setPic();
+            ivProfilePreview.post(this::setPic);
         }
 
         ArrayAdapter<CharSequence> adapterSexe = ArrayAdapter.createFromResource(this,
@@ -135,7 +146,6 @@ public class AddPersonActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        // Sauvegarder le chemin de la photo pour éviter de le perdre si l'activité est détruite (ex: par le système pour libérer de la mémoire)
         outState.putString("currentPhotoPath", currentPhotoPath);
     }
 
@@ -149,8 +159,6 @@ public class AddPersonActivity extends AppCompatActivity {
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        
-        // Paramètres pour forcer la caméra frontale sur un maximum d'appareils
         takePictureIntent.putExtra("android.intent.extras.CAMERA_FACING", 1);
         takePictureIntent.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
         takePictureIntent.putExtra("android.intent.extra.USE_FRONT_CAMERA", true);
@@ -188,13 +196,7 @@ public class AddPersonActivity extends AppCompatActivity {
 
     private void setPic() {
         if (currentPhotoPath != null) {
-            File imgFile = new File(currentPhotoPath);
-            if (imgFile.exists()) {
-                Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
-                if (bitmap != null) {
-                    ivProfilePreview.setImageBitmap(bitmap);
-                }
-            }
+            ImageUtils.loadResizedAndRotatedImage(currentPhotoPath, ivProfilePreview);
         }
     }
 }

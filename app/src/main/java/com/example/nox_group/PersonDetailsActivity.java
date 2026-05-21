@@ -1,12 +1,17 @@
 package com.example.nox_group;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
+
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 
@@ -17,6 +22,18 @@ public class PersonDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Configuration forcée des barres système
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.bg_main));
+        window.setNavigationBarColor(ContextCompat.getColor(this, R.color.bg_main));
+
+        // Forcer les icônes blanches (Status Bar et Navigation Bar)
+        WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(window, window.getDecorView());
+        controller.setAppearanceLightStatusBars(false);
+        controller.setAppearanceLightNavigationBars(false);
+
         setContentView(R.layout.activity_person_details);
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
@@ -43,11 +60,8 @@ public class PersonDetailsActivity extends AppCompatActivity {
             if (person.imagePath != null && !person.imagePath.isEmpty()) {
                 File imgFile = new File(person.imagePath);
                 if (imgFile.exists()) {
-                    // Image capturée (chemin absolu)
-                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    ivProfilePicture.setImageBitmap(myBitmap);
+                    ivProfilePicture.post(() -> ImageUtils.loadResizedAndRotatedImage(person.imagePath, ivProfilePicture));
                 } else {
-                    // Image par défaut (nom de ressource dans drawable)
                     int resId = getResources().getIdentifier(person.imagePath, "drawable", getPackageName());
                     if (resId != 0) {
                         ivProfilePicture.setImageResource(resId);
@@ -59,7 +73,6 @@ public class PersonDetailsActivity extends AppCompatActivity {
                 new Thread(() -> {
                     AppDatabase.getDatabase(PersonDetailsActivity.this).personDao().delete(person);
                     
-                    // Optionnel : Supprimer le fichier image s'il s'agit d'une photo prise
                     if (person.imagePath != null) {
                         File fileToDelete = new File(person.imagePath);
                         if (fileToDelete.exists() && person.imagePath.contains(getPackageName())) {
@@ -68,7 +81,7 @@ public class PersonDetailsActivity extends AppCompatActivity {
                     }
 
                     runOnUiThread(() -> {
-                        Toast.makeText(PersonDetailsActivity.this, "Un batard as bien été supprimé", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PersonDetailsActivity.this, "Le profil a été supprimé", Toast.LENGTH_SHORT).show();
                         finish();
                     });
                 }).start();

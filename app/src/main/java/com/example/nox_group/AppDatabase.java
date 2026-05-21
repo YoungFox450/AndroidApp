@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Person.class}, version = 3)
+@Database(entities = {Person.class}, version = 3, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract PersonDao personDao();
 
@@ -38,23 +38,23 @@ public abstract class AppDatabase extends RoomDatabase {
                 PersonDao dao = INSTANCE.personDao();
                 
                 if (dao.getAnyPerson() == null) {
-                    dao.insert(new Person("Mvula", "Keza", "Odrey", "M",
+                    dao.insert(new Person("Mvula", "Keza", "Odrey", "Masculin",
                         "L2 Informatique Appliquée",
-                        "Un mec chill, surper intello, personne ne lui arrive à la cheville, un baiseur née, ultra puissant", "nox"));
+                        "Etudiant passionné par l'informatique et les nouvelle technologie, avec une formation electronique et embarquée et une experience dans le dev web. mal heuresement trop borné et avec un égo surdimensioné", "nox"));
                     
-                    dao.insert(new Person("Mwamba", "Kanyinda", "Marie", "F", 
-                        "L2 Électricité", 
-                        "Étudiante brillante se spécialisant dans la domotique et les réseaux.", null));
+                    dao.insert(new Person("Milolo", "Bula", "Jael", "Féminin",
+                        "L2 Informatique Appliquer",
+                        "Étudiante brillante se spécialisant dans les réseaux.", null));
                     
-                    dao.insert(new Person("Ngoy", "Tshilumba", "Patrick", "M", 
+                    dao.insert(new Person("Ngoy", "Tshilumba", "Patrick", "Masculin", 
                         "L3 Électronique", 
                         "Expert en maintenance d'appareils médicaux et microprocesseurs.", null));
                     
-                    dao.insert(new Person("Kanyimba", "Lumbwe", "Alice", "F", 
+                    dao.insert(new Person("Kanyimba", "Lumbwe", "Alice", "Féminin", 
                         "Prepa Mécanique", 
                         "Nouvelle recrue avec une forte aptitude pour le dessin industriel.", null));
                     
-                    dao.insert(new Person("Mukendi", "Kasongo", "David", "M", 
+                    dao.insert(new Person("Mukendi", "Kasongo", "David", "Masculin",
                         "L1 Aviation", 
                         "Rêve de devenir ingénieur de bord et travaille sur des simulateurs.", null));
                 }

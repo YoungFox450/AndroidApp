@@ -24,11 +24,18 @@
         <item name="colorSurfaceVariant">@color/surface_lighter</item>
         <item name="colorOnSurfaceVariant">@color/text_body</item>
 
-        <!-- Barres système -->
+        <!-- Barres système : On force la couleur bg_main partout -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@color/bg_main</item>
         <item name="android:navigationBarColor">@color/bg_main</item>
+
+        <!-- Icônes blanches sur fond sombre -->
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="27">false</item>
+
+        <!-- Désactive le contraste forcé (le voile blanc/gris) pour Android 10+ -->
+        <item name="android:enforceNavigationBarContrast" tools:targetApi="29">false</item>
+        <item name="android:enforceStatusBarContrast" tools:targetApi="29">false</item>
     </style>
 
     <style name="Theme.Noxgroup" parent="Base.Theme.Noxgroup" />

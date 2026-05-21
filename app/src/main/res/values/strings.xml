@@ -22,11 +22,13 @@
     <string name="label_bio_header">Bio</string>
     <string name="label_sexe_header">Genre</string>
     <string name="content_desc_take_photo">Prendre une photo de profil</string>
+    <string name="msg_profile_created">Le profil a bien été créé</string>
+    <string name="msg_profile_deleted">Le profil a été supprimé</string>
 
     <string-array name="sexe_choices">
         <item>Masculin</item>
         <item>Féminin</item>
-        <item>Deux foid, Deux fois</item>
+        <item>Deux fois, Deux fois</item>
     </string-array>
 
     <string-array name="level_choices">
